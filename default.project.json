@@ -4,23 +4,41 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "$path": "src/shared",
+      "SRC": {
+        "$path": "src/shared"
+      },
       "Packages": {
         "$path": "Packages"
       }
     },
 
     "ServerScriptService": {
-      "$path": "src/server"
+      "SRC": {
+        "$path": "src/server"
+      }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "$path": "src/client"
+        "SRC": {
+          "$path": "src/client"
+        }
       }
     },
 
     "Workspace": {
+      "Players": {
+        "$className": "Folder"
+      },
+      "Debris": {
+        "$className": "Folder"
+      },
+      "Effects": {
+        "$className": "Folder"
+      },
+      "Checkpoints": {
+        "$className": "Folder"
+      },
       "$properties": {
         "FilteringEnabled": true
       }

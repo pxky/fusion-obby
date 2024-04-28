@@ -25,6 +25,7 @@ function ObbyService:GetCheckpointPart(number: number)
 end
 
 function ObbyService:TpToPart(Player: Player, Instance: BasePart)
+	RunService.Stepped:Wait()
     local playerCharacter = Player.Character or Player.CharacterAdded:Wait()
     playerCharacter:PivotTo(Instance.CFrame + Vector3.new(0, 3, 0))
 end
@@ -34,7 +35,6 @@ function ObbyService:KnitInit()
 	
 	function ObbyService:SetStage(Player: Player, Stage)
 		local PlayerStage = DataService:GetData(Player, "Stage")
-		print(PlayerStage, Stage.StageNumber)
 		if PlayerStage + 1 == Stage.StageNumber then
 			PlayerStage += 1
 			DataService:SetData(Player, "Stage", PlayerStage)
@@ -42,15 +42,14 @@ function ObbyService:KnitInit()
 		DataService:SetData(Player, "CurrentStage", math.clamp(Stage.StageNumber, 0, PlayerStage))
 	end
 
-	workspace.ChildAdded:Connect(function(child: Instance)
-		local Player = Players:GetPlayerFromCharacter(child)
-		if not Player then
-			return
-		end
-		local stage_number = DataService:GetData(Player, "CurrentStage")
-		RunService.Stepped:Wait()
-		child.Parent = workspace.Players or workspace
+	Players.PlayerAdded:Connect(function(Player: Player)
+		local stage_number = DataService:GetData(Player, "Stage")
 		self:TpToPart(Player, ObbyService:GetCheckpointPart(stage_number))
+
+		Player.CharacterAdded:Connect(function()
+			local stage_number = DataService:GetData(Player, "CurrentStage")
+			self:TpToPart(Player, ObbyService:GetCheckpointPart(stage_number))
+		end)
 	end)
 end
 

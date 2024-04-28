@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
-local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local ObbyService = require(ServerScriptService.Services.ObbyService)
+local Knit = require(ReplicatedStorage.Packages.Knit)
 
 local Checkpoint = {}
 Checkpoint.__index = Checkpoint
@@ -18,16 +18,20 @@ function Checkpoint.New(part: BasePart)
 end
 
 function Checkpoint:Init()
-    self.Instance.Touched:Connect(function(hit)
-        local Player = Players:GetPlayerFromCharacter(hit.Parent)
-        if not Player or self.DebounceList[Player] then
-            return
-        end
-        self.DebounceList[Player] = true
-        task.delay(1, function() 
-            self.DebounceList[Player] = nil
+    Knit.OnStart():andThen(function()
+        local ObbyService = Knit.GetService("ObbyService")
+
+        self.Instance.Touched:Connect(function(hit)
+            local Player = Players:GetPlayerFromCharacter(hit.Parent)
+            if not Player or self.DebounceList[Player] then
+                return
+            end
+            self.DebounceList[Player] = true
+            task.delay(1, function() 
+                self.DebounceList[Player] = nil
+            end)
+            ObbyService:SetStage(Player, self)
         end)
-        ObbyService:SetStage(Player, self)
     end)
 end
 
