@@ -6,15 +6,15 @@ function Globals.FindValue(tab: {}, value: any)
 			return v
 		end
 	end
-    return nil
+	return nil
 end
 
 function Globals.CommaNumber(num: number)
-    local numStr = tostring(num)
-	while true do  
+	local numStr = tostring(num)
+	while true do
 		local subsMade
-		numStr, subsMade = string.gsub(numStr, "^(-?%d+)(%d%d%d)", '%1,%2')
-		if (subsMade == 0) then
+		numStr, subsMade = string.gsub(numStr, "^(-?%d+)(%d%d%d)", "%1,%2")
+		if subsMade == 0 then
 			break
 		end
 	end

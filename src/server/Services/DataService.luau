@@ -131,7 +131,7 @@ function DataService:KnitInit()
 			player:Kick()
 		end
 	end
-	
+
 	function DataService:Cleanup(player: Player)
 		local profile = DataService.Profiles[player]
 		if profile ~= nil then

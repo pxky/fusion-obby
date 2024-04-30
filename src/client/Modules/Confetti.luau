@@ -9,21 +9,20 @@ local ParticleEmitter = ConfettiPart:WaitForChild("ParticleEmitter")
 local Confetti = {}
 
 function Confetti:Burst(amount: number)
-    ParticleEmitter:Emit(amount)
+	ParticleEmitter:Emit(amount)
 end
 
 Knit.OnStart():andThen(function()
-    local DataController = Knit.GetController("DataController")
-    local StageValue = DataController:GetDataValue("Stage")
+	local DataController = Knit.GetController("DataController")
+	local StageValue = DataController:GetDataValue("Stage")
 
-    ParticleEmitter.Enabled = false
-    ConfettiPart.Parent = workspace.Effects
+	ParticleEmitter.Enabled = false
+	ConfettiPart.Parent = workspace.Effects
 
-    Fusion.Observer(StageValue):onChange(function()
-        ConfettiPart.CFrame = workspace.Checkpoints:FindFirstChild(StageValue:get()).CFrame
-        Confetti:Burst(50)
-    end)
+	Fusion.Observer(StageValue):onChange(function()
+		ConfettiPart.CFrame = workspace.Checkpoints:FindFirstChild(StageValue:get()).CFrame
+		Confetti:Burst(50)
+	end)
 end)
-
 
 return Confetti

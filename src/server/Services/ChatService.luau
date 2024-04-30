@@ -5,7 +5,7 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local ChatService = {
 	Name = "ChatService",
 	Client = {
-		OnMessage = Knit.CreateSignal()
+		OnMessage = Knit.CreateSignal(),
 	},
 }
 

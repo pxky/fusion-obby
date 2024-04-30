@@ -26,13 +26,20 @@ end
 
 function ObbyService:TpToPart(Player: Player, Instance: BasePart)
 	RunService.Stepped:Wait()
-    local playerCharacter = Player.Character or Player.CharacterAdded:Wait()
-    playerCharacter:PivotTo(Instance.CFrame + Vector3.new(0, 3, 0))
+	local playerCharacter = Player.Character or Player.CharacterAdded:Wait()
+	playerCharacter:PivotTo(Instance.CFrame + Vector3.new(0, 3, 0))
 end
 
 function ObbyService:KnitInit()
 	local DataService = Knit.GetService("DataService")
-	
+
+	self.Client.SelectStage:Connect(function(Player: Player, stage_number: number)
+		local PlayerStage = DataService:GetData(Player, "Stage")
+		stage_number = math.clamp(stage_number, 0, PlayerStage)
+		self:TpToPart(Player, ObbyService:GetCheckpointPart(stage_number))
+		DataService:SetData(Player, "CurrentStage", stage_number)
+	end)
+
 	function ObbyService:SetStage(Player: Player, Stage)
 		local PlayerStage = DataService:GetData(Player, "Stage")
 		if PlayerStage + 1 == Stage.StageNumber then
