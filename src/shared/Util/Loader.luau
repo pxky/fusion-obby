@@ -4,41 +4,45 @@ local RunService = game:GetService("RunService")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Component = require(ReplicatedStorage.SRC.Util.Component)
 
-local Loader = {}
+local Loader = {
+	CachedModules = {},
+}
 
-function Loader:load_modules(directory: Folder, index_type: string | nil, callback)
-	for _, module in ipairs(directory:GetDescendants()) do
+function Loader:load_modules(directory: Folder, callback: (ModuleScript, any) -> nil)
+	for _, module in pairs(directory:GetDescendants()) do
 		if not module:IsA("ModuleScript") then
 			continue
 		end
+
 		local code = require(module)
-		if typeof(index_type) == "string" then
-			code[index_type] = module.Name
+		if module.Name:match("Component$") then
+			code.Tag = module.Name:gsub("Component", "")
+			Component.LoadCode(code)
 		end
-		if typeof(callback) == "function" then
-			callback(code)
-		end
+
+		callback(module, code)
+		Loader.CachedModules[module.Name] = code
 	end
 end
 
 if RunService:IsServer() then
 	local ServerScriptService = game:GetService("ServerScriptService").SRC
-	Loader:load_modules(ServerScriptService.Services, "Name", function(code)
-		Knit.CreateService(code)
+
+	Loader:load_modules(ServerScriptService, function(module, code)
+		if module.Name:match("Service$") then
+			code.Name = module.Name
+			Knit.CreateService(code)
+		end
 	end)
-	Loader:load_modules(ServerScriptService.Components, "Tag", function(code)
-		Component.LoadCode(code)
-	end)
-	Loader:load_modules(ServerScriptService.Modules, nil, nil)
 else
 	local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts.SRC
-	Loader:load_modules(StarterPlayerScripts.Controllers, "Name", function(code)
-		Knit.CreateController(code)
+
+	Loader:load_modules(StarterPlayerScripts, function(module, code)
+		if module.Name:match("Controller$") then
+			code.Name = module.Name
+			Knit.CreateController(code)
+		end
 	end)
-	Loader:load_modules(StarterPlayerScripts.Components, "Tag", function(code)
-		Component.LoadCode(code)
-	end)
-	Loader:load_modules(StarterPlayerScripts.Modules, nil, nil)
 end
 
 Knit.Start():catch(warn)

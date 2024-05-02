@@ -1,1 +1,1 @@
-require(game:GetService("ReplicatedStorage"):WaitForChild("SRC").Util.Loader)
+require(game:GetService("ReplicatedStorage").SRC.Util.Loader)

@@ -1,8 +1,15 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
+local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts
 
-local Knit = require(ReplicatedStorage.Packages.Knit)
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
+local Knit = require(ReplicatedStorage.Packages.Knit)
+
+local Theme = require(script.Parent.Parent.Theme)
+local UIClasses = StarterPlayerScripts.SRC.UI.Classes
+
+local ButtonBase = require(UIClasses.BaseButton)
+local TextLabel = require(UIClasses.TextLabel)
+local ScreenGui = require(UIClasses.ScreenGui)
 
 local New = Fusion.New
 local Children = Fusion.Children
@@ -11,18 +18,10 @@ local Observer = Fusion.Observer
 local Computed = Fusion.Computed
 local Spring = Fusion.Spring
 
-local ButtonBase = require(ReplicatedStorage.SRC.Components.UI.BaseButton)
-
-local DifficultyColors = {
-	[1] = Color3.fromRGB(13, 105, 172),
-	[21] = Color3.fromRGB(91, 154, 76),
-	[48] = Color3.fromRGB(255, 176, 0),
-}
-
-local DifficultyColorValue = Value(Color3.fromRGB(255, 255, 255))
 local StageCounterValue = Value(0)
-
 local ArrowButtonFunction
+
+local DifficultyColorValue = Value(Theme.DifficultyColorValue)
 
 Knit.OnStart():andThen(function()
 	local ObbyService = Knit.GetService("ObbyService")
@@ -34,16 +33,6 @@ Knit.OnStart():andThen(function()
 	end
 
 	Observer(CurrentStageValue):onChange(function()
-		local color = nil
-		for index, _ in pairs(DifficultyColors) do
-			if CurrentStageValue:get() >= index then
-				color = DifficultyColors[index]
-			end
-		end
-		if color == nil then
-			color = Color3.fromRGB(255, 255, 255)
-		end
-		DifficultyColorValue:set(color)
 		StageCounterValue:set(CurrentStageValue:get())
 	end)
 end)
@@ -78,11 +67,8 @@ local function ArrowButton(props)
 	})
 end
 
-return New("ScreenGui")({
+return ScreenGui({
 	Name = "Topbar",
-	Parent = Players.LocalPlayer.PlayerGui,
-	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-	IgnoreGuiInset = true,
 
 	[Children] = {
 		New("Frame")({
@@ -96,46 +82,12 @@ return New("ScreenGui")({
 			Size = UDim2.fromScale(0.5, 0.1),
 
 			[Children] = {
-				New("TextLabel")({
-					Name = "StageCounter",
-					FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+				TextLabel({
 					Text = Computed(function()
 						return "Stage: " .. StageCounterValue:get()
 					end),
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextScaled = true,
-					TextSize = 14,
-					TextWrapped = true,
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
 					LayoutOrder = 3,
 					Size = UDim2.fromScale(0.3, 1),
-
-					[Children] = {
-						New("UIStroke")({
-							Name = "UIStroke",
-							Thickness = 3,
-						}),
-
-						New("UIGradient")({
-							Name = "UIGradient",
-							Color = ColorSequence.new({
-								ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-								ColorSequenceKeypoint.new(0.6, Color3.fromRGB(255, 255, 255)),
-								ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 150, 150)),
-							}),
-							Rotation = 90,
-						}),
-
-						New("UIPadding")({
-							Name = "UIPadding",
-							PaddingLeft = UDim.new(0.05, 0),
-							PaddingRight = UDim.new(0.05, 0),
-						}),
-					},
 				}),
 
 				New("UIListLayout")({

@@ -9,6 +9,9 @@ type component_code = {
 }
 
 function Component.LoadCode(code: component_code)
+	if typeof(code) ~= "table" then
+		return
+	end
 	local function instance_added(instance: Instance)
 		CachedInstances[instance] = CachedInstances[instance] or {}
 		local new_component = code.New(instance)

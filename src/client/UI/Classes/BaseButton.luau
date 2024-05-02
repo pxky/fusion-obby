@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
+local Theme = require(script.Parent.Parent.Parent.UI.Theme)
 
 local New = Fusion.New
 local Children = Fusion.Children
@@ -20,7 +21,7 @@ return function(props)
 	return New("ImageButton")({
 		Name = "BaseButton",
 		Image = "rbxassetid://15637224066",
-		ImageColor3 = props.BackgroundColor or Color3.fromRGB(0, 100, 200),
+		ImageColor3 = Theme.CurrentThemeColors.Background,
 		PressedImage = "rbxassetid://15637224738",
 		ScaleType = Enum.ScaleType.Slice,
 		SliceCenter = Rect.new(512, 512, 512, 512),
