@@ -40,7 +40,14 @@ function ObbyService:KnitInit()
 		DataService:SetData(Player, "CurrentStage", stage_number)
 	end)
 
-	function ObbyService:SetStage(Player: Player, Stage)
+	function ObbyService:SetStage(Player: Player, Stage: number)
+		Stage = math.clamp(Stage, 0, #Checkpoints - 1)
+		DataService:SetData(Player, "Stage", Stage)
+		DataService:SetData(Player, "CurrentStage", Stage)
+		self:TpToPart(Player, ObbyService:GetCheckpointPart(Stage))
+	end
+
+	function ObbyService:CheckpointTouched(Player: Player, Stage)
 		local PlayerStage = DataService:GetData(Player, "Stage")
 		if PlayerStage + 1 == Stage.StageNumber then
 			PlayerStage += 1

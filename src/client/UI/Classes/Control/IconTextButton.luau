@@ -2,9 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
-local Components = script.Parent
-local BaseButton = require(Components.BaseButton)
-local TextLabel = require(Components.TextLabel)
+local Classes = script.Parent.Parent
+local BaseButton = require(Classes.Control.BaseButton)
+local TextLabel = require(Classes.View.TextLabel)
 
 local New = Fusion.New
 local Children = Fusion.Children

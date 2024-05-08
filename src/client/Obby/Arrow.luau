@@ -21,6 +21,8 @@ function Arrow:TweenToCheckpoint(name: string)
 		CheckpointArrow.Parent = workspace.Effects
 	else
 		CheckpointArrow.Parent = ReplicatedStorage.Effects
+		is_arrow_moving = false
+		return
 	end
 
 	local moveToSpawnTween = TweenService:Create(

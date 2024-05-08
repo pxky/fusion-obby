@@ -30,7 +30,7 @@ function Checkpoint:Init()
 			task.delay(1, function()
 				self.DebounceList[Player] = nil
 			end)
-			ObbyService:SetStage(Player, self)
+			ObbyService:CheckpointTouched(Player, self)
 		end)
 	end)
 end

@@ -6,9 +6,11 @@ local ObbyData = require(ReplicatedStorage.SRC.ObbyData)
 
 local Value = Fusion.Value
 local Observer = Fusion.Observer
+local Spring = Fusion.Spring
 
 local theme = {}
-theme.DifficultyColorValue = Value(Color3.fromRGB(255, 255, 255))
+theme.DifficultyColorValueNoSpring = Value(Color3.fromRGB(255, 255, 255))
+theme.DifficultyColorValue = Spring(theme.DifficultyColorValueNoSpring, 1, 1)
 
 theme.Themes = {
 	["Dark"] = {
@@ -46,16 +48,17 @@ Knit.OnStart():andThen(function()
 	local CurrentStageValue = DataController:GetDataValue("CurrentStage")
 
 	Observer(CurrentStageValue):onChange(function()
-		local color = nil
+		local color, biggest_number = nil, 0
 		for index, _ in pairs(ObbyData.DifficultyColors) do
-			if CurrentStageValue:get() >= index then
+			if index > biggest_number and CurrentStageValue:get() >= index then
+				biggest_number = index
 				color = ObbyData.DifficultyColors[index]
 			end
 		end
 		if color == nil then
 			color = Color3.fromRGB(255, 255, 255)
 		end
-		theme.DifficultyColorValue:set(color)
+		theme.DifficultyColorValueNoSpring:set(color)
 	end)
 end)
 

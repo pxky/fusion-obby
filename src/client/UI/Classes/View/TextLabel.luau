@@ -5,14 +5,7 @@ local Fusion = require(ReplicatedStorage.Packages.Fusion)
 local New = Fusion.New
 local Children = Fusion.Children
 
-type Props = {
-	Text: string?,
-	LayoutOrder: number?,
-	Size: UDim2?,
-	Position: UDim2?,
-}
-
-return function(props: Props)
+return function(props)
 	return New("TextLabel")({
 		FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
 		Text = props.Text,

@@ -5,8 +5,8 @@ local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
 
-local ScreenGui = require(UIClasses.ScreenGui)
-local IconTextButton = require(UIClasses.IconTextButton)
+local ScreenGui = require(UIClasses.View.ScreenGui)
+local IconTextButton = require(UIClasses.Control.IconTextButton)
 
 local New = Fusion.New
 local Children = Fusion.Children

@@ -7,9 +7,9 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local Theme = require(script.Parent.Parent.Theme)
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
 
-local ButtonBase = require(UIClasses.BaseButton)
-local TextLabel = require(UIClasses.TextLabel)
-local ScreenGui = require(UIClasses.ScreenGui)
+local ButtonBase = require(UIClasses.Control.BaseButton)
+local TextLabel = require(UIClasses.View.TextLabel)
+local ScreenGui = require(UIClasses.View.ScreenGui)
 
 local New = Fusion.New
 local Children = Fusion.Children
