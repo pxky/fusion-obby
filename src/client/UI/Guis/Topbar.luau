@@ -4,7 +4,6 @@ local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScrip
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
-local Theme = require(script.Parent.Parent.Theme)
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
 
 local ButtonBase = require(UIClasses.Control.BaseButton)
@@ -16,12 +15,9 @@ local Children = Fusion.Children
 local Value = Fusion.Value
 local Observer = Fusion.Observer
 local Computed = Fusion.Computed
-local Spring = Fusion.Spring
 
 local StageCounterValue = Value(0)
 local ArrowButtonFunction
-
-local DifficultyColorValue = Value(Theme.DifficultyColorValue)
 
 Knit.OnStart():andThen(function()
 	local ObbyService = Knit.GetService("ObbyService")
@@ -52,7 +48,6 @@ end
 local function ArrowButton(props)
 	return ButtonBase({
 		Name = props.Name,
-		BackgroundColor = Spring(DifficultyColorValue, 0.5, 0.5),
 		LayoutOrder = props.LayoutOrder,
 
 		[Children] = {

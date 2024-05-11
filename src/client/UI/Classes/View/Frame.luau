@@ -4,11 +4,13 @@ local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
 local Theme = require(script.Parent.Parent.Parent.Theme)
 
+local Window = require(script.Parent.Window)
+
 local New = Fusion.New
 local Children = Fusion.Children
 
 return function(props)
-	return New("ImageLabel")({
+	props[Children] = New("ImageLabel")({
 		Name = "Background",
 		Image = "rbxassetid://15637223145",
 		ImageColor3 = Theme.CurrentThemeColors.Background,
@@ -25,4 +27,5 @@ return function(props)
 
 		[Children] = props[Children],
 	})
+	return Window(props)
 end

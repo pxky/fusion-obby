@@ -8,8 +8,9 @@ local Children = Fusion.Children
 local New = Fusion.New
 
 return function(props)
-	return New("Frame")({
-		Name = "Window",
+	local Frame = New("Frame")({
+		Name = props.Name or "Window",
+		Parent = props.Parent,
 		LayoutOrder = props.LayoutOrder or 1,
 
 		BackgroundTransparency = 1,
@@ -18,15 +19,10 @@ return function(props)
 
 		Size = props.Size or UDim2.fromScale(1, 1),
 		Position = props.Position or UDim2.fromScale(0.5, 0.5),
-		AnchorPoint = Vector2.new(0.5, 0.5),
+		AnchorPoint = props.AnchorPoint or Vector2.new(0.5, 0.5),
 
 		[Children] = {
 			props[Children],
-
-			Shadow({
-				Elevation = 6,
-				ZIndex = 0,
-			}),
 
 			New("UIAspectRatioConstraint")({
 				Name = "UIAspectRatioConstraint",
@@ -34,4 +30,12 @@ return function(props)
 			}),
 		},
 	})
+
+	Shadow({
+		Parent = Frame,
+		Elevation = props.ShadowElavation or 4,
+		ZIndex = 0,
+	})
+
+	return Frame
 end

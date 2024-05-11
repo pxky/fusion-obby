@@ -36,6 +36,11 @@ local DataService = {
 DataService.Template = {
 	Stage = 0,
 	CurrentStage = 0,
+	Settings = {
+		["Night Time"] = false,
+		["Music Volume"] = 0.5,
+		["Sound Effect Volume"] = 0.5,
+	},
 }
 
 DataService.Leaderstats = {

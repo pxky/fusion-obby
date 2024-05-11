@@ -7,16 +7,19 @@ local Children = Fusion.Children
 
 return function(props)
 	return New("TextLabel")({
+		Parent = props.Parent,
 		FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
 		Text = props.Text,
+		TextXAlignment = props.TextXAlignment or "Center",
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextScaled = true,
 		TextWrapped = true,
-		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundTransparency = 1,
 		LayoutOrder = props.LayoutOrder or 1,
+
 		Size = props.Size or UDim2.fromScale(1, 1),
 		Position = props.Position or UDim2.fromScale(0.5, 0.5),
+		AnchorPoint = props.AnchorPoint or Vector2.new(0.5, 0.5),
 
 		[Children] = {
 			New("UIStroke")({

@@ -247,8 +247,9 @@ return function(props)
 		obj:Destroy()
 	end)
 
-	return New("Frame")({
+	local Frame = New("Frame")({
 		Name = "Shadows",
+		Parent = props.Parent,
 		BackgroundTransparency = 1,
 		ZIndex = props.ZIndex or 1,
 
@@ -258,4 +259,44 @@ return function(props)
 
 		[Children] = shadows,
 	})
+
+	-- dont ask
+	task.defer(function()
+		local object_to_bind_to = nil
+		for _, v in pairs(Frame.Parent:GetChildren()) do
+			if v.Name ~= "Shadows" and v.Position ~= nil then
+				object_to_bind_to = v
+				break
+			end
+		end
+		if object_to_bind_to ~= nil then
+			local current_position = object_to_bind_to.Position
+			local current_size = object_to_bind_to.Size
+			local current_rotation = object_to_bind_to.Rotation
+
+			object_to_bind_to:GetPropertyChangedSignal("Position"):Connect(function()
+				Frame.Position += UDim2.new(
+					object_to_bind_to.Position.X.Scale - current_position.X.Scale,
+					object_to_bind_to.Position.X.Offset - current_position.X.Offset,
+					object_to_bind_to.Position.Y.Scale - current_position.Y.Scale,
+					object_to_bind_to.Position.Y.Offset - current_position.Y.Offset
+				)
+				current_position = object_to_bind_to.Position
+			end)
+			object_to_bind_to:GetPropertyChangedSignal("Size"):Connect(function()
+				Frame.Size += UDim2.new(
+					object_to_bind_to.Size.X.Scale - current_size.X.Scale,
+					object_to_bind_to.Size.X.Offset - current_size.X.Offset,
+					object_to_bind_to.Size.Y.Scale - current_size.Y.Scale,
+					object_to_bind_to.Size.Y.Offset - current_size.Y.Offset
+				)
+				current_size = object_to_bind_to.Size
+			end)
+			object_to_bind_to:GetPropertyChangedSignal("Rotation"):Connect(function()
+				Frame.Rotation = object_to_bind_to.Rotation - current_rotation
+			end)
+		end
+	end)
+
+	return Frame
 end

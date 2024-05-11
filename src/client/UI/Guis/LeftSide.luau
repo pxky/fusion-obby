@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts
+local Players = game:GetService("Players")
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
@@ -41,18 +42,39 @@ return ScreenGui({
 					Text = "Shop",
 					Icon = "rbxassetid://15282199149",
 					LayoutOrder = 1,
+
+					OnClick = function()
+						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Shop")
+						if gui then
+							gui.Enabled = not gui.Enabled
+						end
+					end,
 				}),
 
 				IconTextButton({
 					Text = "Backpack",
 					Icon = "rbxassetid://15350056439",
 					LayoutOrder = 2,
+
+					OnClick = function()
+						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Backpack")
+						if gui then
+							gui.Enabled = not gui.Enabled
+						end
+					end,
 				}),
 
 				IconTextButton({
 					Text = "Settings",
 					Icon = "rbxassetid://15282200659",
 					LayoutOrder = 3,
+
+					OnClick = function()
+						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Settings")
+						if gui then
+							gui.Enabled = not gui.Enabled
+						end
+					end,
 				}),
 			},
 		}),
