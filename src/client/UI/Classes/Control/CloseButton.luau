@@ -11,10 +11,6 @@ return function(props)
 		Position = UDim2.fromScale(1, 0),
 		Size = UDim2.fromScale(0.15, 0.15),
 
-		OnClick = function()
-			props.CloseGui.Enabled = false
-		end,
-
 		FixEffectsOnClick = true,
 	})
 end

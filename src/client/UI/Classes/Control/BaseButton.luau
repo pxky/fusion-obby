@@ -105,6 +105,7 @@ return function(props)
 
 	return Window({
 		Name = props.Name or "ButtonWindow",
+		ZIndex = props.ZIndex or 1,
 		LayoutOrder = props.LayoutOrder or 1,
 		AspectRatio = props.AspectRatio or 1,
 

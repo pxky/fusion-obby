@@ -18,6 +18,7 @@ local New = Fusion.New
 local Value = Fusion.Value
 
 local SettingFrames = Value({})
+local GuiEnabled = Value(false)
 
 local SettingFunctions = {
 	["Night Time"] = function(value)
@@ -125,31 +126,33 @@ Knit.OnStart():andThen(function()
 	SettingFrames:set(frames)
 end)
 
-local Gui = ScreenGui({
+return ScreenGui({
 	Name = "Settings",
-})
-
-Frame({
-	Parent = Gui,
-	Size = UDim2.fromScale(0.5, 0.5),
+	Enabled = GuiEnabled,
 
 	[Children] = {
-		CloseButton({
-			CloseGui = Gui,
-		}),
-		TitleLabel({
-			Text = "Settings",
-		}),
-		New("CanvasGroup")({ -- fix clipping
-			BackgroundTransparency = 1,
-			Size = UDim2.fromScale(0.95, 0.875),
-			Position = UDim2.fromScale(0.025, 0.1),
+		Frame({
+			Size = UDim2.fromScale(0.5, 0.5),
 
 			[Children] = {
-				ScrollingFrame,
+				CloseButton({
+					OnClick = function()
+						GuiEnabled:set(not GuiEnabled:get())
+					end,
+				}),
+				TitleLabel({
+					Text = "Settings",
+				}),
+				New("CanvasGroup")({ -- fix clipping
+					BackgroundTransparency = 1,
+					Size = UDim2.fromScale(0.95, 0.875),
+					Position = UDim2.fromScale(0.025, 0.1),
+
+					[Children] = {
+						ScrollingFrame,
+					},
+				}),
 			},
 		}),
 	},
 })
-
-return {}
