@@ -15,10 +15,22 @@ local Frame = require(UIClasses.View.Frame)
 
 local Children = Fusion.Children
 local New = Fusion.New
-local Observer = Fusion.Observer
 local Value = Fusion.Value
 
 local SettingFrames = Value({})
+
+local SettingFunctions = {
+	["Night Time"] = function(value)
+		if value then
+			game.Lighting.ClockTime = 5
+		else
+			game.Lighting.ClockTime = 15
+		end
+	end,
+	["Shadows Enabled"] = function(value)
+		game:GetService("Lighting").GlobalShadows = value
+	end,
+}
 
 local ScrollingFrame = New("ScrollingFrame")({
 	AutomaticCanvasSize = "Y",
@@ -28,7 +40,9 @@ local ScrollingFrame = New("ScrollingFrame")({
 	ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255),
 	VerticalScrollBarInset = Enum.ScrollBarInset.Always,
 
-	Size = UDim2.fromScale(1, 1),
+	Size = UDim2.fromScale(1, 0.975),
+	AnchorPoint = Vector2.new(0.5, 0.5),
+	Position = UDim2.fromScale(0.5, 0.5),
 
 	[Children] = {
 		New("UIListLayout")({
@@ -46,11 +60,43 @@ Knit.OnStart():andThen(function()
 	local DataController = Knit.GetController("DataController")
 	local SettingValue = DataController:GetDataValue("Settings")
 
-	Observer(SettingValue):onChange(function()
-		SettingService.UpdateSettings(SettingValue:get())
-	end)
-
 	local function SettingFrame(setting, value)
+		local settingControl
+		local settingType = typeof(value)
+
+		local function update(newValue)
+			local setting_table = SettingValue:get()
+			setting_table[setting] = newValue
+			SettingValue:set(setting_table)
+			if SettingFunctions[setting] then
+				SettingFunctions[setting](newValue)
+			end
+			SettingService.UpdateSettings:Fire(setting_table)
+		end
+		update(value)
+
+		if settingType == "boolean" then
+			settingControl = Toggle({
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.fromScale(0.975, 0.5),
+				Size = UDim2.fromScale(0.25, 0.9),
+
+				OnClick = update,
+				Toggled = value,
+			})
+		else
+			--[[
+				settingControl = TextBox({
+				Text = tostring(value),
+				TextXAlignment = "Right",
+
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.fromScale(0.975, 0.5),
+				Size = UDim2.fromScale(0.25, 0.9),
+			})
+			]]
+		end
+
 		local Frame = New("Frame")({
 			BackgroundTransparency = 1,
 			Size = UDim2.fromScale(1, 0.15),
@@ -65,20 +111,7 @@ Knit.OnStart():andThen(function()
 					Size = UDim2.fromScale(0.65, 0.75),
 				}),
 
-				if typeof(value) == "boolean"
-					then Toggle({
-						AnchorPoint = Vector2.new(1, 0.5),
-						Position = UDim2.fromScale(0.975, 0.5),
-						Size = UDim2.fromScale(0.25, 0.9),
-					})
-					else TextLabel({
-						Text = tostring(value),
-						TextXAlignment = "Right",
-
-						AnchorPoint = Vector2.new(1, 0.5),
-						Position = UDim2.fromScale(0.975, 0.5),
-						Size = UDim2.fromScale(0.25, 0.9),
-					}),
+				settingControl,
 			},
 		})
 

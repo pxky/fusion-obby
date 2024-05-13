@@ -38,8 +38,7 @@ DataService.Template = {
 	CurrentStage = 0,
 	Settings = {
 		["Night Time"] = false,
-		["Music Volume"] = 0.5,
-		["Sound Effect Volume"] = 0.5,
+		["Shadows Enabled"] = true,
 	},
 }
 

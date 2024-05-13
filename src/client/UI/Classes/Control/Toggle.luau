@@ -26,7 +26,11 @@ local function generic_gradient_shadow()
 end
 
 return function(props)
-	props.Toggled = Value(false)
+	if props.Toggled ~= nil then
+		props.Toggled = Value(props.Toggled)
+	else
+		props.Toggled = Value(false)
+	end
 
 	return BaseButton({
 		BackgroundColor3 = Spring(
@@ -101,6 +105,9 @@ return function(props)
 
 		OnClick = function()
 			props.Toggled:set(not props.Toggled:get())
+			if props.OnClick then
+				props.OnClick(props.Toggled:get())
+			end
 		end,
 	})
 end
