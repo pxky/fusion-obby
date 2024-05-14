@@ -1,10 +1,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts
-local Players = game:GetService("Players")
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
+local SettingsGui = require(script.Parent.Settings)
 
 local ScreenGui = require(UIClasses.View.ScreenGui)
 local IconTextButton = require(UIClasses.Control.IconTextButton)
@@ -43,12 +43,7 @@ return ScreenGui({
 					Icon = "rbxassetid://15282199149",
 					LayoutOrder = 1,
 
-					OnClick = function()
-						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Shop")
-						if gui then
-							gui.Enabled = not gui.Enabled
-						end
-					end,
+					OnClick = function() end,
 				}),
 
 				IconTextButton({
@@ -56,12 +51,7 @@ return ScreenGui({
 					Icon = "rbxassetid://15350056439",
 					LayoutOrder = 2,
 
-					OnClick = function()
-						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Backpack")
-						if gui then
-							gui.Enabled = not gui.Enabled
-						end
-					end,
+					OnClick = function() end,
 				}),
 
 				IconTextButton({
@@ -70,10 +60,7 @@ return ScreenGui({
 					LayoutOrder = 3,
 
 					OnClick = function()
-						local gui = Players.LocalPlayer.PlayerGui:FindFirstChild("Settings")
-						if gui then
-							gui.Enabled = not gui.Enabled
-						end
+						SettingsGui.GuiEnabled:set(not SettingsGui.GuiEnabled:get())
 					end,
 				}),
 			},

@@ -10,9 +10,7 @@ local New = Fusion.New
 local Children = Fusion.Children
 
 return function(props)
-	props[Children] = props[Children] or {}
-	table.insert(
-		props[Children],
+	props[Children] = {
 		New("ImageLabel")({
 			Name = "Background",
 			Image = "rbxassetid://15637223145",
@@ -29,7 +27,7 @@ return function(props)
 			ZIndex = 1,
 
 			[Children] = props[Children],
-		})
-	)
+		}),
+	}
 	return Window(props)
 end

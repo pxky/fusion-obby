@@ -17,8 +17,10 @@ local Children = Fusion.Children
 local New = Fusion.New
 local Value = Fusion.Value
 
+local Settings = {}
+
 local SettingFrames = Value({})
-local GuiEnabled = Value(false)
+Settings.GuiEnabled = Value(false)
 
 local SettingFunctions = {
 	["Night Time"] = function(value)
@@ -126,9 +128,9 @@ Knit.OnStart():andThen(function()
 	SettingFrames:set(frames)
 end)
 
-return ScreenGui({
+ScreenGui({
 	Name = "Settings",
-	Enabled = GuiEnabled,
+	Enabled = Settings.GuiEnabled,
 
 	[Children] = {
 		Frame({
@@ -137,7 +139,7 @@ return ScreenGui({
 			[Children] = {
 				CloseButton({
 					OnClick = function()
-						GuiEnabled:set(not GuiEnabled:get())
+						Settings.GuiEnabled:set(false)
 					end,
 				}),
 				TitleLabel({
@@ -156,3 +158,5 @@ return ScreenGui({
 		}),
 	},
 })
+
+return Settings

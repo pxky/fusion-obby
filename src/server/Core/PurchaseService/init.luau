@@ -24,7 +24,7 @@ function PurchaseService:CanBuyPurchasable(player: Player, purchasableData: {})
 	then
 		self.Client.PromptMessage:Fire(player, {
 			["Success"] = false,
-			["Message"] = "Purchase failed... You can't buy this right now :(",
+			["Message"] = "Purchase failed... You can't buy this right now!",
 		})
 		return false
 	else
@@ -79,36 +79,43 @@ function PurchaseService:KnitStart()
 			if productData["Id"] ~= receiptInfo["ProductId"] then
 				continue
 			end
-			self.Client.PromptMessage:Fire(player, {
-				["Success"] = true,
-				["Message"] = `You have successfully purchased ${productName}!`,
-			})
+
 			self:GiveProduct(player, productName)
 			return Enum.ProductPurchaseDecision.PurchaseGranted
 		end
-		self.Client.PromptMessage:Fire(player, {
-			["Success"] = false,
-			["Message"] = "Purchase failed... Something went wrong :(",
-		})
+
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
+	MarketplaceService.PromptProductPurchaseFinished:Connect(function(player, productId, wasPurchased)
+		if wasPurchased == true then
+			self.Client.PromptMessage:Fire(Players:GetPlayerByUserId(player), {
+				["Success"] = true,
+				["Message"] = "Purchase successful! 🥳",
+			})
+		else
+			self.Client.PromptMessage:Fire(Players:GetPlayerByUserId(player), {
+				["Success"] = false,
+				["Message"] = "Purchase failed... 😔",
+			})
+		end
+	end)
 	MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, gamepassId, wasPurchased)
 		if wasPurchased == true then
 			for gamepassName, gamepassData in pairs(Gamepasses) do
 				if gamepassData["Id"] ~= gamepassId then
 					continue
 				end
-				self.Client.PromptMessage:Fire(player, {
+				self.Client.PromptMessage:Fire(Players:GetPlayerByUserId(player), {
 					["Success"] = true,
-					["Message"] = `You have successfully purchased ${gamepassName}!`,
+					["Message"] = "Purchase successful! 🥳",
 				})
 				self:GiveGamepass(player, gamepassName)
 				break
 			end
 		else
-			self.Client.PromptMessage:Fire(player, {
+			self.Client.PromptMessage:Fire(Players:GetPlayerByUserId(player), {
 				["Success"] = false,
-				["Message"] = "Purchase failed :(",
+				["Message"] = "Purchase failed... 😔",
 			})
 		end
 	end)

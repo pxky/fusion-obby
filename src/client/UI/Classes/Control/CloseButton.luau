@@ -2,7 +2,7 @@ local Classes = script.Parent.Parent
 local IconButton = require(Classes.Control.IconButton)
 
 return function(props)
-	return IconButton({
+	local close_props = {
 		Name = "CloseButton",
 		Icon = "rbxassetid://9545003266",
 		BackgroundColor = Color3.fromRGB(200, 0, 0),
@@ -12,5 +12,9 @@ return function(props)
 		Size = UDim2.fromScale(0.15, 0.15),
 
 		FixEffectsOnClick = true,
-	})
+	}
+	for name, data in pairs(close_props) do
+		props[name] = data
+	end
+	return IconButton(props)
 end

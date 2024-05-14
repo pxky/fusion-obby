@@ -11,9 +11,11 @@ return function(props)
 		Name = props.Name or "gui",
 		Parent = Players.LocalPlayer.PlayerGui,
 		Enabled = props.Enabled or true,
+		DisplayOrder = props.DisplayOrder or 1,
 
 		IgnoreGuiInset = true,
-		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		ResetOnSpawn = false,
+		ZIndexBehavior = props.ZIndexBehavior or Enum.ZIndexBehavior.Sibling,
 
 		[Children] = props[Children],
 	})

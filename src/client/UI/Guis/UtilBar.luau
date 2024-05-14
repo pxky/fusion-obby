@@ -17,7 +17,11 @@ local TextButton = require(UIClasses.Control.TextButton)
 local New = Fusion.New
 local Children = Fusion.Children
 local Value = Fusion.Value
+local Observer = Fusion.Observer
 
+local DataController
+local PurchaseController
+local DisableSkips = Value(false)
 local CurrentStageValue = Value(0)
 local NukeControlVisible = Value(false)
 
@@ -37,8 +41,14 @@ local function ResetCharacter()
 end
 
 Knit.OnStart():andThen(function()
-	local DataController = Knit.GetController("DataController")
-	CurrentStageValue = DataController:GetDataValue("CurrentStage")
+	DataController = Knit.GetController("DataController")
+	PurchaseController = Knit.GetController("PurchaseController")
+	Observer(DataController:GetDataValue("Stage")):onChange(function()
+		DisableSkips:set(DataController:GetDataValue("Stage"):get() >= #Checkpoints - 1)
+	end)
+	Observer(DataController:GetDataValue("CurrentStage")):onChange(function()
+		CurrentStageValue:set(DataController:GetDataValue("CurrentStage"):get())
+	end)
 end)
 
 ContextActionService:BindAction("RToReset", function(_, inputState)
@@ -78,12 +88,18 @@ return ScreenGui({
 					Text = "Skip Stage",
 					Icon = "rbxassetid://16213594570",
 					LayoutOrder = 2,
+
+					OnClick = function()
+						PurchaseController:PromptProduct("Skip")
+					end,
+					Disabled = DisableSkips,
 				}),
 
 				IconTextButton({
 					Text = "FREE Skip",
 					Icon = "rbxassetid://16213594570",
 					LayoutOrder = 3,
+					Disabled = DisableSkips,
 				}),
 
 				IconTextButton({
@@ -123,6 +139,10 @@ return ScreenGui({
 
 									Position = UDim2.fromScale(0.5, 0.275),
 									Size = UDim2.fromScale(0.95, 0.45),
+
+									OnClick = function()
+										PurchaseController.PromptProduct("Nuke")
+									end,
 								}),
 								TextButton({
 									Text = "☢️ ALL Servers ☢️",
@@ -133,6 +153,10 @@ return ScreenGui({
 
 									Position = UDim2.fromScale(0.5, 0.725),
 									Size = UDim2.fromScale(0.95, 0.45),
+
+									OnClick = function()
+										PurchaseController.PromptProduct("Nuke All")
+									end,
 								}),
 							},
 						}),
