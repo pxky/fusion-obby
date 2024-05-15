@@ -17,14 +17,22 @@ local PurchaseService = {
 }
 
 function PurchaseService:CanBuyPurchasable(player: Player, purchasableData: {})
-	if
-		not purchasableData
-		or purchasableData["Purchasable"] == false
-		or purchasableData["Prerequisite"](player) == false
-	then
+	if not purchasableData then
+		self.Client.PromptMessage:Fire(player, {
+			["Success"] = false,
+			["Message"] = "Purchase failed... This purchasable doesn't exist...",
+		})
+		return false
+	elseif purchasableData["Purchasable"] == false then
 		self.Client.PromptMessage:Fire(player, {
 			["Success"] = false,
 			["Message"] = "Purchase failed... You can't buy this right now!",
+		})
+		return false
+	elseif purchasableData["Prerequisite"](player) == false then
+		self.Client.PromptMessage:Fire(player, {
+			["Success"] = false,
+			["Message"] = "Purchase failed... Prerequisite isn't met...",
 		})
 		return false
 	else

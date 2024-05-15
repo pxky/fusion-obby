@@ -40,6 +40,8 @@ DataService.Template = {
 		["Night Time"] = false,
 		["Shadows Enabled"] = true,
 	},
+	TimeSpentForSkip = 0,
+	FreeSkips = 0,
 }
 
 DataService.Leaderstats = {
@@ -107,6 +109,33 @@ function DataService:UpdateLeaderstat(player: Player, statName: string, value: a
 	valueInstance.Value = value
 end
 
+function DataService:Setup(player: Player)
+	local profile = profileStore:LoadProfileAsync("Player_" .. player.UserId)
+	if profile ~= nil then
+		profile:AddUserId(player.UserId)
+		profile:Reconcile()
+		profile:ListenToRelease(function()
+			DataService.Profiles[player] = nil
+			player:Kick()
+		end)
+		if player:IsDescendantOf(PlayerService) then
+			DataService.Profiles[player] = profile
+			self:SetupLeaderstats(player)
+		else
+			profile:Release()
+		end
+	else
+		player:Kick()
+	end
+end
+
+function DataService:Cleanup(player: Player)
+	local profile = DataService.Profiles[player]
+	if profile ~= nil then
+		profile:Release()
+	end
+end
+
 ----- Public Functions -----
 
 function DataService.Client:GetOwnData(player: Player)
@@ -116,35 +145,6 @@ end
 ----- Initialize -----
 
 function DataService:KnitInit()
-	function DataService:Setup(player: Player)
-		local profile = profileStore:LoadProfileAsync("Player_" .. player.UserId)
-		if profile ~= nil then
-			profile:AddUserId(player.UserId)
-			profile:Reconcile()
-			profile:ListenToRelease(function()
-				DataService.Profiles[player] = nil
-				player:Kick()
-			end)
-			if player:IsDescendantOf(PlayerService) then
-				DataService.Profiles[player] = profile
-				self:SetupLeaderstats(player)
-			else
-				profile:Release()
-			end
-		else
-			player:Kick()
-		end
-	end
-
-	function DataService:Cleanup(player: Player)
-		local profile = DataService.Profiles[player]
-		if profile ~= nil then
-			profile:Release()
-		end
-	end
-end
-
-function DataService:KnitStart()
 	for _, player in PlayerService:GetPlayers() do
 		self:Setup(player)
 	end

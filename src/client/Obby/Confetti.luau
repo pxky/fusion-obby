@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
@@ -22,6 +23,7 @@ Knit.OnStart():andThen(function()
 	Fusion.Observer(StageValue):onChange(function()
 		ConfettiPart.CFrame = workspace.Checkpoints:FindFirstChild(StageValue:get()).CFrame
 		Confetti:Burst(50)
+		SoundService.Effects.CheckpointCleared:Play()
 	end)
 end)
 

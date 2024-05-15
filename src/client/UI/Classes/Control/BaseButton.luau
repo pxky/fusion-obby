@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
@@ -76,6 +77,7 @@ return function(props)
 
 		[OnEvent("Activated")] = function()
 			if props.OnClick ~= nil and not props.Disabled:get(false) then
+				SoundService.Effects.UIClick:Play()
 				props.OnClick()
 				-- if the gui is disabled the effects dont update.
 				if props.FixEffectsOnClick then
@@ -94,6 +96,7 @@ return function(props)
 		end,
 
 		[OnEvent("MouseEnter")] = function()
+			SoundService.Effects.UIHover:Play()
 			isHovering:set(true)
 		end,
 

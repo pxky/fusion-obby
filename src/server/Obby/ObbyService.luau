@@ -30,7 +30,7 @@ function ObbyService:TpToPart(Player: Player, Instance: BasePart)
 	playerCharacter:PivotTo(Instance.CFrame + Vector3.new(0, 3, 0))
 end
 
-function ObbyService:KnitInit()
+function ObbyService:KnitStart()
 	local DataService = Knit.GetService("DataService")
 
 	self.Client.SelectStage:Connect(function(Player: Player, stage_number: number)
@@ -56,7 +56,7 @@ function ObbyService:KnitInit()
 		DataService:SetData(Player, "CurrentStage", math.clamp(Stage.StageNumber, 0, PlayerStage))
 	end
 
-	Players.PlayerAdded:Connect(function(Player: Player)
+	local function playerAdded(Player)
 		local stage_number = DataService:GetData(Player, "Stage")
 		self:TpToPart(Player, ObbyService:GetCheckpointPart(stage_number))
 
@@ -64,7 +64,12 @@ function ObbyService:KnitInit()
 			local stage_number = DataService:GetData(Player, "CurrentStage")
 			self:TpToPart(Player, ObbyService:GetCheckpointPart(stage_number))
 		end)
-	end)
+	end
+
+	for _, player in pairs(Players:GetPlayers()) do
+		playerAdded(player)
+	end
+	Players.PlayerAdded:Connect(playerAdded)
 end
 
 return ObbyService

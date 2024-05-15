@@ -11,22 +11,31 @@ local TrollService = {
 
 TrollService.IsNuking = false
 
-MessagingService:SubscribeAsync("Nuke All", function(message) end)
+function TrollService:FireTroll(buyer: Player, troll_name: string)
+	self.Client.TrollFired:FireAll(troll_name, buyer)
+	if self.TrollFunctions[troll_name] then
+		self.TrollFunctions[troll_name](buyer.Name)
+	end
+end
+
+MessagingService:SubscribeAsync("Nuke All", function(message)
+	TrollService:FireTroll(message.Data, "Nuke")
+end)
+
+local function nukeFired()
+	TrollService.IsNuking = true
+	task.wait(10)
+	TrollService.IsNuking = false
+end
 
 TrollService.TrollFunctions = {
 	["Nuke"] = function(buyer: Player)
-		print("nuke")
+		nukeFired()
 	end,
 	["Nuke All"] = function(buyer: Player)
-		print("nuke all")
+		MessagingService:PublishAsync("Nuke All", buyer)
+		nukeFired()
 	end,
 }
-
-function TrollService:FireTroll(buyer: Player, troll_name: string)
-	self.Client.TrollFired:FireAll(troll_name)
-	if self.TrollFunctions[troll_name] then
-		self.TrollFunctions[troll_name](buyer)
-	end
-end
 
 return TrollService

@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts.SRC
 
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
@@ -14,7 +15,17 @@ local Computed = Fusion.Computed
 
 local PopupController = {}
 
+local TopPopups = Value({})
 local BottomPopups = Value({})
+
+function PopupController:ShowMessageAtTop(props)
+	local top_popups = TopPopups:get()
+	local new_popup = PopupController:PopupFrame(props)
+	table.insert(top_popups, new_popup)
+	new_popup.GroupTransparency = 1
+	TopPopups:set(top_popups)
+	SoundService.Effects.PopupAppear:Play()
+end
 
 function PopupController:ShowMessageAtBottom(props)
 	local bottom_popups = BottomPopups:get()
@@ -22,6 +33,7 @@ function PopupController:ShowMessageAtBottom(props)
 	table.insert(bottom_popups, new_popup)
 	new_popup.GroupTransparency = 1
 	BottomPopups:set(bottom_popups)
+	SoundService.Effects.PopupAppear:Play()
 end
 
 function PopupController:PopupFrame(props)
@@ -58,7 +70,7 @@ function PopupController:PopupFrame(props)
 						BackgroundTransparency = 1,
 
 						AnchorPoint = Vector2.new(0.5, 0.5),
-						Position = UDim2.new(0.5, 0, 0.5, -3),
+						Position = UDim2.new(0.5, 0, 0.5, -2),
 						Size = UDim2.fromScale(1, 1),
 
 						[Children] = {
@@ -91,6 +103,30 @@ ScreenGui({
 	Name = "Popups",
 
 	[Children] = {
+		New("Frame")({
+			Name = "Top",
+			BackgroundTransparency = 1,
+
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.fromScale(0.5, 0.2),
+			Size = UDim2.fromScale(0.5, 0.1),
+
+			[Children] = {
+				New("UIListLayout")({
+					Name = "UIListLayout",
+					HorizontalAlignment = Enum.HorizontalAlignment.Center,
+					SortOrder = Enum.SortOrder.LayoutOrder,
+					VerticalAlignment = Enum.VerticalAlignment.Top,
+				}),
+
+				New("UIAspectRatioConstraint")({
+					Name = "UIAspectRatioConstraint",
+					AspectRatio = 10,
+				}),
+
+				TopPopups,
+			},
+		}),
 		New("Frame")({
 			Name = "Bottom",
 			BackgroundTransparency = 1,

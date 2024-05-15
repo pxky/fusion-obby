@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 local StarterPlayerScripts = game:GetService("StarterPlayer").StarterPlayerScripts.SRC
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
@@ -12,7 +13,6 @@ local Children = Fusion.Children
 local New = Fusion.New
 local Tween = Fusion.Tween
 local Spring = Fusion.Spring
-local Observer = Fusion.Observer
 local Computed = Fusion.Computed
 
 local PurchaseController = {}
@@ -20,18 +20,20 @@ local PurchaseController = {}
 local IsPurchasing = Value(false)
 local SpinningIconRotation = Value(0)
 
-function PurchaseController:KnitInit()
+function PurchaseController:KnitStart()
 	local PurchaseService = Knit.GetService("PurchaseService")
 	local PopupController = Knit.GetController("PopupController")
 
 	function PurchaseController:PromptProduct(productName: string)
 		PurchaseService.PromptProduct:Fire(productName)
 		IsPurchasing:set(true)
+		SoundService.Effects.PurchasePrompt:Play()
 	end
 
 	function PurchaseController:PromptGamepass(gamepassName: string)
 		PurchaseService.PromptGamepass:Fire(gamepassName)
 		IsPurchasing:set(true)
+		SoundService.Effects.PurchasePrompt:Play()
 	end
 
 	PurchaseService.PromptMessage:Connect(function(messageData: {})
@@ -43,8 +45,8 @@ function PurchaseController:KnitInit()
 		IsPurchasing:set(false)
 	end)
 
-	Observer(IsPurchasing):onChange(function()
-		while IsPurchasing:get() do
+	task.spawn(function()
+		while true do
 			SpinningIconRotation:set(SpinningIconRotation:get() + 1800)
 			task.wait(3)
 		end
