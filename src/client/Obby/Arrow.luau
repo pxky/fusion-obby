@@ -5,7 +5,7 @@ local TweenService = game:GetService("TweenService")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
-local CheckpointArrow = ReplicatedStorage.Effects.CheckpointArrow
+local CheckpointArrow = ReplicatedStorage.Effects.Arrow
 
 local Arrow = {}
 

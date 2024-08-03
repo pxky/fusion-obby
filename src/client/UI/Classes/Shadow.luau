@@ -1,4 +1,4 @@
--- modified ver of lydies Shadow.luau: https://github.com/7kayoh/Lydie/blob/main/src/Components/Shadow.luau
+-- modified: https://github.com/7kayoh/Lydie/blob/main/src/Components/Shadow.luau
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 

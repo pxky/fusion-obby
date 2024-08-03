@@ -61,57 +61,60 @@ local function createNukeEffect(props)
 	})
 end
 
+local nuke = function(buyer: string)
+	local nuke_size = Value(UDim2.fromScale(0, 0))
+	local nuke_transparency = Value(0)
+	local effect_part = createNukeEffect({
+		["nuke_size"] = nuke_size,
+		["nuke_transparency"] = nuke_transparency,
+	})
+	SoundService.Effects.IncomingNuke:Play()
+	PopupController:ShowMessageAtTop({
+		Text = `☢️ !! {buyer} launched a Nuke !! ☢️`,
+		TextColor = Color3.fromRGB(255, 255, 0),
+	})
+	task.wait(3)
+	SoundService.Effects.NukeExplosion:Play()
+	task.wait(3)
+	SoundService.Effects.IncomingNuke:Stop()
+	LightingHandler:SetLighting(ReplicatedStorage.LightingProfiles.Nuke)
+	effect_part.Parent = workspace.Effects
+	local playerChar = Player.Character or Player.CharacterAdded:Wait()
+	effect_part.Position = playerChar:WaitForChild("HumanoidRootPart").Position - Vector3.new(0, 3, 0)
+	nuke_size:set(UDim2.fromScale(50, 50))
+
+	local NukeShake = Shake.new()
+	NukeShake.Amplitude = 5
+	NukeShake.Frequency = 0.1
+	NukeShake.FadeInTime = 0
+	NukeShake.SustainTime = 3
+	NukeShake.RotationInfluence = Vector3.new(0.1, 0.1, 0.1)
+	local camCF = workspace.CurrentCamera.CFrame
+	NukeShake:Start()
+	NukeShake:BindToRenderStep("Nuke", Enum.RenderPriority.Last.Value, function(pos, rot, done)
+		local distance = (effect_part.Position - camCF.Position).Magnitude / 100
+		pos = Shake.InverseSquare(pos, distance)
+		rot = Shake.InverseSquare(rot, distance)
+		workspace.CurrentCamera.CFrame = camCF * CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
+		if done then
+			workspace.CurrentCamera.CFrame = camCF
+		end
+	end)
+
+	task.wait(1)
+	playerChar:WaitForChild("Humanoid").Health = 0
+	task.wait(4)
+	nuke_transparency:set(1)
+	NukeShake:Stop()
+	task.wait(3)
+	effect_part:Destroy()
+	SoundService.Effects.NukeExplosion:Stop()
+	LightingHandler:SetDefaultLighting()
+end
+
 TrollHandler.Functions = {
-	["Nuke"] = function(buyer: string)
-		local nuke_size = Value(UDim2.fromScale(0, 0))
-		local nuke_transparency = Value(0)
-		local effect_part = createNukeEffect({
-			["nuke_size"] = nuke_size,
-			["nuke_transparency"] = nuke_transparency,
-		})
-		SoundService.Effects.IncomingNuke:Play()
-		PopupController:ShowMessageAtTop({
-			Text = `☢️ !! {buyer} launched a Nuke !! ☢️`,
-			TextColor = Color3.fromRGB(255, 255, 0),
-		})
-		task.wait(3)
-		SoundService.Effects.NukeExplosion:Play()
-		task.wait(3)
-		SoundService.Effects.IncomingNuke:Stop()
-		LightingHandler:SetLighting(ReplicatedStorage.LightingProfiles.Nuke)
-		effect_part.Parent = workspace.Effects
-		local playerChar = Player.Character or Player.CharacterAdded:Wait()
-		effect_part.Position = playerChar:WaitForChild("HumanoidRootPart").Position - Vector3.new(0, 3, 0)
-		nuke_size:set(UDim2.fromScale(50, 50))
-
-		local NukeShake = Shake.new()
-		NukeShake.Amplitude = 5
-		NukeShake.Frequency = 0.1
-		NukeShake.FadeInTime = 0
-		NukeShake.SustainTime = 3
-		NukeShake.RotationInfluence = Vector3.new(0.1, 0.1, 0.1)
-		local camCF = workspace.CurrentCamera.CFrame
-		NukeShake:Start()
-		NukeShake:BindToRenderStep("Nuke", Enum.RenderPriority.Last.Value, function(pos, rot, done)
-			local distance = (effect_part.Position - camCF.Position).Magnitude / 100
-			pos = Shake.InverseSquare(pos, distance)
-			rot = Shake.InverseSquare(rot, distance)
-			workspace.CurrentCamera.CFrame = camCF * CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
-			if done then
-				workspace.CurrentCamera.CFrame = camCF
-			end
-		end)
-
-		task.wait(1)
-		playerChar:WaitForChild("Humanoid").Health = 0
-		task.wait(4)
-		nuke_transparency:set(1)
-		NukeShake:Stop()
-		task.wait(3)
-		effect_part:Destroy()
-		SoundService.Effects.NukeExplosion:Stop()
-		LightingHandler:SetDefaultLighting()
-	end,
+	["Nuke"] = nuke,
+	["Nuke All"] = nuke,
 }
 
 Knit.OnStart():andThen(function()

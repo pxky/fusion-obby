@@ -14,19 +14,24 @@ function Loader:load_modules(directory: Folder, callback: (ModuleScript, any) ->
 			continue
 		end
 
-		local code = require(module)
-		if module.Name:match("Component$") then
-			code.Tag = module.Name:gsub("Component", "")
-			Component.LoadCode(code)
-		end
+		local success, err = pcall(function()
+			local code = require(module)
+			if module.Name:match("Component$") then
+				code.Tag = module.Name:gsub("Component", "")
+				Component.LoadCode(code)
+			end
 
-		callback(module, code)
-		Loader.CachedModules[module.Name] = code
+			callback(module, code)
+			Loader.CachedModules[module.Name] = code
+		end)
+		if not success then
+			warn(err)
+		end
 	end
 end
 
 if RunService:IsServer() then
-	local ServerScriptService = game:GetService("ServerScriptService").SRC
+	local ServerScriptService = game:GetService("ServerScriptService"):WaitForChild("SRC")
 
 	Loader:load_modules(ServerScriptService, function(module, code)
 		if module.Name:match("Service$") then

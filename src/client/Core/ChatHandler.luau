@@ -7,26 +7,10 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local ChatHandler = {}
 
 ChatHandler.ChatTags = {
-	[309352419] = { -- ielanie
-		{
-			TagText = "Bnuuy",
-			TagColor = Color3.fromRGB(180, 128, 255),
-		},
-	},
-	[138655565] = { -- caspxerr
-		{
-			TagText = "casbrr",
-			TagColor = Color3.fromRGB(207, 140, 82),
-		},
-	},
-	[3569305331] = { -- poky
+	[3569305331] = { -- me :)
 		{
 			TagText = `🌌`,
 			TagColor = Color3.fromRGB(106, 80, 220),
-		},
-		{
-			TagText = "🐈",
-			TagColor = Color3.fromRGB(243, 140, 255),
 		},
 	},
 }

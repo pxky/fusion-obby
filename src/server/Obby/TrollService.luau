@@ -18,10 +18,6 @@ function TrollService:FireTroll(buyer: Player, troll_name: string)
 	end
 end
 
-MessagingService:SubscribeAsync("Nuke All", function(message)
-	TrollService:FireTroll(message.Data, "Nuke")
-end)
-
 local function nukeFired()
 	TrollService.IsNuking = true
 	task.wait(10)
@@ -37,5 +33,11 @@ TrollService.TrollFunctions = {
 		nukeFired()
 	end,
 }
+
+function TrollService:KnitStart()
+	MessagingService:SubscribeAsync("Nuke All", function(message)
+		TrollService:FireTroll(message.Data, "Nuke")
+	end)
+end
 
 return TrollService

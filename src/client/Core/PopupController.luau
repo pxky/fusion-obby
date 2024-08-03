@@ -24,7 +24,7 @@ function PopupController:ShowMessageAtTop(props)
 	table.insert(top_popups, new_popup)
 	new_popup.GroupTransparency = 1
 	TopPopups:set(top_popups)
-	SoundService.Effects.PopupAppear:Play()
+	SoundService.UI.Appear:Play()
 end
 
 function PopupController:ShowMessageAtBottom(props)
@@ -33,7 +33,7 @@ function PopupController:ShowMessageAtBottom(props)
 	table.insert(bottom_popups, new_popup)
 	new_popup.GroupTransparency = 1
 	BottomPopups:set(bottom_popups)
-	SoundService.Effects.PopupAppear:Play()
+	SoundService.UI.Appear:Play()
 end
 
 function PopupController:PopupFrame(props)

@@ -77,7 +77,7 @@ return function(props)
 
 		[OnEvent("Activated")] = function()
 			if props.OnClick ~= nil and not props.Disabled:get(false) then
-				SoundService.Effects.UIClick:Play()
+				SoundService.UI.Click:Play()
 				props.OnClick()
 				-- if the gui is disabled the effects dont update.
 				if props.FixEffectsOnClick then
@@ -96,7 +96,7 @@ return function(props)
 		end,
 
 		[OnEvent("MouseEnter")] = function()
-			SoundService.Effects.UIHover:Play()
+			SoundService.UI.Hover:Play()
 			isHovering:set(true)
 		end,
 

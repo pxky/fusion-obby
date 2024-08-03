@@ -5,6 +5,7 @@ local Fusion = require(ReplicatedStorage.Packages.Fusion)
 
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
 local SettingsGui = require(script.Parent.Settings)
+local shop = require(script.Parent.Shop)
 
 local ScreenGui = require(UIClasses.View.ScreenGui)
 local IconTextButton = require(UIClasses.Control.IconTextButton)
@@ -43,7 +44,9 @@ return ScreenGui({
 					Icon = "rbxassetid://15282199149",
 					LayoutOrder = 1,
 
-					OnClick = function() end,
+					OnClick = function()
+						shop.GuiEnabled:set(not shop.GuiEnabled:get())
+					end,
 				}),
 
 				IconTextButton({

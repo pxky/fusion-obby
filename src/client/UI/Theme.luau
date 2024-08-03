@@ -16,7 +16,7 @@ theme.Themes = {
 	["Dark"] = {
 		Background = Color3.fromRGB(25, 25, 50),
 	},
-	["Stage Colors"] = {
+	["Stage Colors"] = { -- automatically updating colors based on stage
 		Background = theme.DifficultyColorValue,
 	},
 }

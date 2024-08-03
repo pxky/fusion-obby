@@ -9,6 +9,9 @@ local Fusion = require(ReplicatedStorage.Packages.Fusion)
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 local Checkpoints = CollectionService:GetTagged("Checkpoint")
+CollectionService:GetInstanceAddedSignal("Checkpoint"):Connect(function(instance)
+	table.insert(Checkpoints, instance)
+end)
 local UIClasses = StarterPlayerScripts.SRC.UI.Classes
 local ScreenGui = require(UIClasses.View.ScreenGui)
 local Frame = require(UIClasses.View.Frame)
@@ -54,6 +57,8 @@ local function ResetCharacter()
 	if root_part and checkpoint then
 		root_part.CFrame = checkpoint.CFrame + Vector3.new(0, 3, 0)
 		character:FindFirstChild("Humanoid").Health = 100
+	else
+		character:FindFirstChild("Humanoid").Health = 0
 	end
 end
 

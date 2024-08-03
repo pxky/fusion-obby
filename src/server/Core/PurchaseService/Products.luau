@@ -15,7 +15,7 @@ end)
 
 return {
 	["Skip"] = {
-		Id = 1816110351,
+		Id = 1896356347,
 		Prerequisite = function(player)
 			local Checkpoints = CollectionService:GetTagged("Checkpoint")
 			local max_stage = #Checkpoints - 1
@@ -32,7 +32,7 @@ return {
 		end,
 	},
 	["Nuke"] = {
-		Id = 1828446132,
+		Id = 1896356484,
 		Prerequisite = function(player)
 			return not TrollService.IsNuking
 		end,
@@ -41,7 +41,7 @@ return {
 		end,
 	},
 	["Nuke All"] = {
-		Id = 1828446159,
+		Id = 1896356630,
 		Prerequisite = function(player)
 			return not TrollService.IsNuking
 		end,

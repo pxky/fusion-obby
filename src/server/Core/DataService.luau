@@ -42,6 +42,8 @@ DataService.Template = {
 	},
 	TimeSpentForSkip = 0,
 	FreeSkips = 0,
+	Coins = 0,
+	Inventory = {},
 }
 
 DataService.Leaderstats = {

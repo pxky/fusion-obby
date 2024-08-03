@@ -42,6 +42,10 @@ end
 
 function PurchaseService:PromptProduct(player: Player, productName: string)
 	local data = Products[productName]
+	if not data then
+		warn(productName, "not a valid product")
+		return
+	end
 	if PurchaseService:CanBuyPurchasable(player, data) then
 		MarketplaceService:PromptProductPurchase(player, data["Id"])
 	end
@@ -49,6 +53,10 @@ end
 
 function PurchaseService:PromptGamepass(player: Player, gamepassName: string)
 	local data = Gamepasses[gamepassName]
+	if not data then
+		warn(gamepassName, "not a valid gamepass")
+		return
+	end
 	if PurchaseService:CanBuyPurchasable(player, data) then
 		MarketplaceService:PromptGamePassPurchase(player, data["Id"])
 	end
